@@ -1,0 +1,55 @@
+javascript:(function(){
+  // find the frame that has Xrm.WebApi
+  function findXrmWin(){
+    const tryWins = [window].concat(
+      Array.from(document.querySelectorAll('iframe')).map(f=>{
+        try { return f.contentWindow; } catch(e){ return null; }
+      })
+    );
+    return tryWins.find(w => w && w.Xrm && w.Xrm.WebApi);
+  }
+
+  const xw = findXrmWin();
+  if(!xw){
+    alert('Xrm.WebApi not found. Open a record/list page in the Dynamics app (not just make.powerapps.com) and try again.');
+    return;
+  }
+
+
+
+let flowid = prompt("Enter Flow ID (GUID from make.powerapps.com):", "3f4790ec-f27d-f011-b4cc-6045bd0c58a0");
+  if (!flowid) { alert("Flow ID is required."); return; }
+
+let date = prompt("Enter date (YYYY-MM-DD):", "2025-08-20");
+  if (!date) { alert("Date is required."); return; }
+
+let time = prompt("Enter time (HH:mm) - uses string search so you can use 18: or 18:54", "18:54");
+  if (!time) { alert("Time is required."); return; }
+
+
+var fetchXml = "?fetchXml=<fetch>  <entity name='flowrun'> <attribute name='flowrunid' /> <attribute name='name' /> <attribute name='createdon' /> <attribute name='starttime' /> <attribute name='workflow' /> <attribute name='callingproductrunid' /> <attribute name='callingproductresourceid' /> <order attribute='name' descending='false' /> <filter type='and'>   <condition attribute='workflowid' operator='eq' value='"+ flowid + "' />   <condition attribute='starttime' operator='on' value='" + date + "' /> </filter></entity></fetch>";
+
+
+  xw.Xrm.WebApi.retrieveMultipleRecords('flowrun',fetchXml)
+    .then(result => { console.log('OK', result); alert('WebApi call succeeded'); 
+    let allItems = [];
+
+    for (var i = 0; i < result.entities.length; i++) {
+      let tmp = [new Date(result.entities[i].starttime).toLocaleString(),result.entities[i].name];
+      allItems.push(tmp);
+
+    }                    
+
+    console.log(allItems);
+    const matches = allItems.filter(item => item[0].includes(time));
+    console.log("Flow run ids for "+time);
+    let alertMatches = matches.map((match) => match[0]+": "+match[1]).join("\n");
+    alert("Flow runs found - press F12 for console to copy them \n"+"starttime: name\n"+alertMatches);
+    matches.map((match) => console.log(match[1]));
+    
+
+  })
+    .catch(e => { console.error(e); alert('WebApi error: ' + (e && e.message || e)); });
+
+
+}());
