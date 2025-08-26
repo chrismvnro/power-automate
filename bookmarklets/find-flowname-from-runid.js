@@ -16,7 +16,7 @@ javascript: (function () {
   const xw = findXrmWin();
   if (!xw) {
     alert(
-      "Xrm.WebApi not found. Open a record/list page in the Dynamics app (not just make.powerapps.com) and try again."
+      "Xrm.WebApi was not found. Open a record/list page in the Dynamics app (not just make.powerapps.com) and try again."
     );
     return;
   }
