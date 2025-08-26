@@ -22,7 +22,7 @@ javascript: (function () {
   }
 
   let flowid = prompt(
-    "Enter Flow Run ID (GUID after /runs/... URL from make.powerapps.com):",
+    "Enter Flow Run ID (it is the UID after /runs/... URL from make.powerapps.com):",
     "08584458910194312838705383176CU43"
   );
   if (!flowid) {
