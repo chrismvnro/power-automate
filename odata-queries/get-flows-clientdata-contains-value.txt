@@ -1,0 +1,30 @@
+
+
+Below searches for all Power Automate Flows that contain 'cm_instructor' within the flows JSON definition - clientdata property.
+
+https://org20aa300f.crm11.dynamics.com/api/data/v9.2/workflows?$select=name,workflowid&$filter=category%20eq%205%20and%20contains(clientdata,'cm_instructor') 
+
+Get flow whose name contains specified value:
+
+https://org20aa300f.crm11.dynamics.com/api/data/v9.2/workflows?$select=name,workflowid,clientdata&$filter=category%20eq%205%20and%20contains(name,%27request added%27)
+
+
+https://org20aa300f.crm11.dynamics.com/api/data/v9.2/workflows?$select=name,workflowid&$filter=category%20eq%205%20and%20contains(clientdata,'subscriptionRequest/entityname') and contains(clientdata,'new_licenceitem')
+
+
+
+Search for Power Automate flow with trigger 'new_newlicenceitem' table
+NB. we are searching for "subscriptionRequest/entityname": "new_newlicenceitem",
+
+Return name and workflow id only
+
+https://org20aa300f.crm11.dynamics.com/api/data/v9.2/workflows?$select=name,workflowid&$filter=category%20eq%205%20and%20contains(clientdata,%27subscriptionRequest/entityname%27)%20and%20contains(clientdata,%27new_newlicenceitem%27)
+
+Return name, workflow id, and client data
+
+https://org20aa300f.crm11.dynamics.com/api/data/v9.2/workflows?$select=name,workflowid,clientdata&$filter=category%20eq%205%20and%20contains(clientdata,%27subscriptionRequest/entityname%27)%20and%20contains(clientdata,%27new_newlicenceitem%27)
+
+
+Get name, workflowid, and clientdata for all Power Automate flows - may need to call this via the web api as it could return large numbers
+
+https://org20aa300f.crm11.dynamics.com/api/data/v9.2/workflows?$select=name,workflowid,clientdata&$filter=category eq 5
